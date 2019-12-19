@@ -3,6 +3,7 @@ input =
 inputArray = input.split(",");
 
 planetOrbitMap = new Map();
+planetPlanetMap = new Map();
 orbitSum = 0;
 
 for (let i = 0; i < inputArray.length; i++) {
@@ -15,6 +16,8 @@ for (let i = 0; i < inputArray.length; i++) {
       planetOrbitMap.set(planet2, planetOrbitMap.get(planet1) + 1);
       orbitSum += planetOrbitMap.get(planet1) + 1;
       i = -1;
+
+      planetPlanetMap.set(planet2, planet1); //Part 2
       continue;
     } else {
       continue;
@@ -26,7 +29,38 @@ for (let i = 0; i < inputArray.length; i++) {
     planetOrbitMap.set(planet2, 1);
     i = -1;
     orbitSum = 1;
+
+    planetPlanetMap.set(planet2, planet1); //Part 2
   }
 }
 
 console.log(orbitSum);
+
+//Part 2
+youChain = getChain("YOU");
+sanChain = getChain("SAN");
+commonPlanet = "";
+
+for (let i = 0; i < youChain.length; i++) {
+    let planet = youChain[i];
+    
+    if (sanChain.includes(planet)) {
+        commonPlanet = planet
+        console.log("Distance: ", (i+ sanChain.findIndex(checkPlanet)));
+        break
+    }
+}
+
+function checkPlanet(planet) {
+    return planet == commonPlanet
+}
+
+function getChain(planet) {
+  chain = [];
+  while (planetPlanetMap.get(planet) != undefined) {
+    let newPlanet = planetPlanetMap.get(planet);
+    chain.push(newPlanet);
+    planet = newPlanet;
+  }
+  return chain;
+}
